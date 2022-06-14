@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace ToDoBackend.Server.Identity
+namespace ToDoBackend.Auth.Identity
 {
     public class AuthContext : IdentityDbContext<IdentityUser>
     {

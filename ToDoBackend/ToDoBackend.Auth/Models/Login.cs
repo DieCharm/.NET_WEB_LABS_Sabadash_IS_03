@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ToDoBackend.Server.Models
+namespace ToDoBackend.Auth.Models
 {
     public class Login
     {

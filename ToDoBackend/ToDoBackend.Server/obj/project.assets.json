@@ -1528,6 +1528,26 @@
         "runtime": {
           "lib/netstandard1.3/System.Xml.XmlSerializer.dll": {}
         }
+      },
+      "ToDoBackend.Auth/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v5.0",
+        "dependencies": {
+          "Microsoft.AspNetCore.Authentication.JwtBearer": "5.0.9",
+          "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "5.0.4",
+          "Microsoft.AspNetCore.Identity.UI": "5.0.4",
+          "Microsoft.EntityFrameworkCore": "5.0.4",
+          "Microsoft.EntityFrameworkCore.SqlServer": "5.0.4"
+        },
+        "compile": {
+          "bin/placeholder/ToDoBackend.Auth.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ToDoBackend.Auth.dll": {}
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
       }
     }
   },
@@ -5672,6 +5692,11 @@
         "system.xml.xmlserializer.4.3.0.nupkg.sha512",
         "system.xml.xmlserializer.nuspec"
       ]
+    },
+    "ToDoBackend.Auth/1.0.0": {
+      "type": "project",
+      "path": "../ToDoBackend.Auth/ToDoBackend.Auth.csproj",
+      "msbuildProject": "../ToDoBackend.Auth/ToDoBackend.Auth.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -5681,7 +5706,8 @@
       "Microsoft.AspNetCore.Identity.UI >= 5.0.4",
       "Microsoft.EntityFrameworkCore.Design >= 5.0.4",
       "Microsoft.EntityFrameworkCore.SqlServer >= 5.0.4",
-      "Microsoft.EntityFrameworkCore.Tools >= 5.0.4"
+      "Microsoft.EntityFrameworkCore.Tools >= 5.0.4",
+      "ToDoBackend.Auth >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -5708,7 +5734,11 @@
       "frameworks": {
         "net5.0": {
           "targetAlias": "net5.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\ToDo\\ToDoBackend\\ToDoBackend.Auth\\ToDoBackend.Auth.csproj": {
+              "projectPath": "C:\\ToDo\\ToDoBackend\\ToDoBackend.Auth\\ToDoBackend.Auth.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

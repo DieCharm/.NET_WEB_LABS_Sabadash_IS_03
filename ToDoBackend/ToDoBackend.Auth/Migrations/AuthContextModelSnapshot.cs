@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using ToDoBackend.Server.Identity;
+using ToDoBackend.Auth.Identity;
 
 namespace ToDoBackend.Server.Migrations
 {

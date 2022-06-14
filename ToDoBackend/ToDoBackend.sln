@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDoBackend.BLL", "ToDoBack
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDoBackend.Server", "ToDoBackend.Server\ToDoBackend.Server.csproj", "{262B49B5-8D0F-4DEE-B39D-CF7544EB4FFC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDoBackend.Auth", "ToDoBackend.Auth\ToDoBackend.Auth.csproj", "{8AA4DB31-6625-42BC-B715-E1D0F5B0341E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,5 +30,9 @@ Global
 		{262B49B5-8D0F-4DEE-B39D-CF7544EB4FFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{262B49B5-8D0F-4DEE-B39D-CF7544EB4FFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{262B49B5-8D0F-4DEE-B39D-CF7544EB4FFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8AA4DB31-6625-42BC-B715-E1D0F5B0341E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AA4DB31-6625-42BC-B715-E1D0F5B0341E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AA4DB31-6625-42BC-B715-E1D0F5B0341E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AA4DB31-6625-42BC-B715-E1D0F5B0341E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

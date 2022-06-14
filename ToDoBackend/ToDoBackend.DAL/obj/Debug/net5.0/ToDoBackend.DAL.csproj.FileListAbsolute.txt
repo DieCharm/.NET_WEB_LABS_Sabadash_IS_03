@@ -10,3 +10,6 @@ C:\ToDo\ToDoBackend\ToDoBackend.DAL\obj\Debug\net5.0\ToDoBackend.DAL.csproj.Core
 C:\ToDo\ToDoBackend\ToDoBackend.DAL\obj\Debug\net5.0\ToDoBackend.DAL.dll
 C:\ToDo\ToDoBackend\ToDoBackend.DAL\obj\Debug\net5.0\ref\ToDoBackend.DAL.dll
 C:\ToDo\ToDoBackend\ToDoBackend.DAL\obj\Debug\net5.0\ToDoBackend.DAL.pdb
+C:\ToDo\ToDoBackend\ToDoBackend.DAL\bin\Debug\net5.0\ToDoBackend.DAL.runtimeconfig.json
+C:\ToDo\ToDoBackend\ToDoBackend.DAL\bin\Debug\net5.0\ToDoBackend.DAL.runtimeconfig.dev.json
+C:\ToDo\ToDoBackend\ToDoBackend.DAL\obj\Debug\net5.0\ToDoBackend.DAL.genruntimeconfig.cache
