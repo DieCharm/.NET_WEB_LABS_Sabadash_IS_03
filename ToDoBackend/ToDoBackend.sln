@@ -4,9 +4,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDoBackend.DAL", "ToDoBack
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDoBackend.BLL", "ToDoBackend.BLL\ToDoBackend.BLL.csproj", "{FED8AF52-3ACB-46A7-887C-FA0401628ECA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDoBackend.Resource", "ToDoBackend.Resource\ToDoBackend.Resource.csproj", "{D88CAAE7-C9B8-484B-8816-02E31620CAFB}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDoBackend.Auth", "ToDoBackend.Auth\ToDoBackend.Auth.csproj", "{262B49B5-8D0F-4DEE-B39D-CF7544EB4FFC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDoBackend.Server", "ToDoBackend.Server\ToDoBackend.Server.csproj", "{262B49B5-8D0F-4DEE-B39D-CF7544EB4FFC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
