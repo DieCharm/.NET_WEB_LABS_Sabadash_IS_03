@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 
-namespace ToDoBackend.Server.JWT
+namespace ToDoBackend.Auth.JWT
 {
     public class Token
     {

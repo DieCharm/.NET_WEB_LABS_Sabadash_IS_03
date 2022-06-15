@@ -14,7 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using ToDoBackend.Auth.Identity;
-using ToDoBackend.Server.JWT;
+using ToDoBackend.Auth.JWT;
 
 namespace ToDoBackend.Server
 {

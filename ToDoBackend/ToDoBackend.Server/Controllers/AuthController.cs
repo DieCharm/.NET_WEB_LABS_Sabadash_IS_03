@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using ToDoBackend.Auth.Identity;
-using ToDoBackend.Server.JWT;
+using ToDoBackend.Auth.JWT;
 using ToDoBackend.Auth.Models;
 
 namespace ToDoBackend.Server.Controllers

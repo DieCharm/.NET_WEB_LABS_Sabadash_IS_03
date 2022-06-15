@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ToDoBackend.Auth.Identity;
 
-namespace ToDoBackend.Server.Migrations
+namespace ToDoBackend.Auth.Migrations
 {
     [DbContext(typeof(AuthContext))]
     [Migration("20220522133030_UsersInit")]

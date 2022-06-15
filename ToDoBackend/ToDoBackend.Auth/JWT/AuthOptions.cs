@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using Microsoft.IdentityModel.Tokens;
 
-namespace ToDoBackend.Server.JWT
+namespace ToDoBackend.Auth.JWT
 {
     public class AuthOptions
     {

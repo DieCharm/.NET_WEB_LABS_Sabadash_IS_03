@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ToDoBackend.Auth.Identity;
 
-namespace ToDoBackend.Server.Migrations
+namespace ToDoBackend.Auth.Migrations
 {
     [DbContext(typeof(AuthContext))]
     partial class AuthContextModelSnapshot : ModelSnapshot

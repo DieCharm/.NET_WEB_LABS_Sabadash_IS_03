@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace ToDoBackend.Server.Migrations
+namespace ToDoBackend.Auth.Migrations
 {
     public partial class UsersInit : Migration
     {
