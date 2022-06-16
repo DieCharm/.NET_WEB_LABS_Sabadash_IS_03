@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ToDoBackend.DAL.Database;
@@ -45,5 +47,24 @@ namespace ToDoBackend.DAL.Repositories
         {
             _context.Cases.Update(entity);
         }
+
+        public async Task DeleteByConditionAsync(Func<Case, bool> condition)
+        {
+            (await _context.Cases.ToListAsync())
+                .RemoveAll(item => condition(item));
+        }
+
+        /*public async Task UpdateByConditionAsync(Func<Case, bool> condition)
+        {
+            foreach (var caseForUpdate in _context.Cases)
+            {
+                if (condition(caseForUpdate))
+                {
+                    
+                }
+            }
+        }*/
     }
 }
+
+

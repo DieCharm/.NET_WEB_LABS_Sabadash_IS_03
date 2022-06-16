@@ -20,6 +20,15 @@
 
     <ItemGroup>
       <Compile Remove="Interfaces\ITaskRepository.cs" />
+      <Compile Remove="Mdoels\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="Mdoels\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Mdoels\**" />
     </ItemGroup>
 
 </Project>

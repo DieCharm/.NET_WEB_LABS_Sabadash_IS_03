@@ -24,7 +24,7 @@ namespace ToDoBackend.Server.Controllers
             _userManager = userManager;
             _signInManager = signInManager;
         }
-
+        
         [HttpPost]
         [Route("register")]
         public async Task<ActionResult> Register([FromBody] Login request)
@@ -40,6 +40,7 @@ namespace ToDoBackend.Server.Controllers
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(newUser, false);
+                    //await _userManager.AddToRoleAsync(newUser,"member");
                     string token = Token.GetToken(newUser);
                     return new JsonResult(token);
                 }

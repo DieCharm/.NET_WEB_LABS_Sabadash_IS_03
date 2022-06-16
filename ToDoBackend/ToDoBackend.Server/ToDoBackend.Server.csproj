@@ -21,6 +21,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\ToDoBackend.Auth\ToDoBackend.Auth.csproj" />
+      <ProjectReference Include="..\ToDoBackend.BLL\ToDoBackend.BLL.csproj" />
     </ItemGroup>
 
 </Project>

@@ -12,7 +12,7 @@ namespace ToDoBackend.Auth.Services
             _userManager = userManager;
         }
         
-        public async Task<IdentityUser> GetUserById(string id)
+        public async Task<IdentityUser> GetUserByIdAsync(string id)
         {
             return await _userManager.FindByIdAsync(id);
         }

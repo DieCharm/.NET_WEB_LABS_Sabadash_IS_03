@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ToDoBackend.DAL.Database;
@@ -45,6 +47,14 @@ namespace ToDoBackend.DAL.Repositories
         public void Update(ProjectUser entity)
         {
             _context.ProjectUsers.Update(entity);
+        }
+        
+        public async Task<bool> DeleteByConditionAsync(Func<ProjectUser, bool> condition)
+        {
+            int firstLength = _context.ProjectUsers.Count();
+            (await _context.ProjectUsers.ToListAsync())
+                .RemoveAll(item => condition(item));
+            return _context.ProjectUsers.Count() != firstLength;
         }
     }
 }

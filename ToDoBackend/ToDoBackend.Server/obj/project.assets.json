@@ -2,6 +2,18 @@
   "version": 3,
   "targets": {
     "net5.0": {
+      "AutoMapper/11.0.1": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.CSharp": "4.7.0"
+        },
+        "compile": {
+          "lib/netstandard2.1/AutoMapper.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.1/AutoMapper.dll": {}
+        }
+      },
       "Humanizer.Core/2.8.26": {
         "type": "package",
         "compile": {
@@ -1548,10 +1560,52 @@
         "frameworkReferences": [
           "Microsoft.AspNetCore.App"
         ]
+      },
+      "ToDoBackend.BLL/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v5.0",
+        "dependencies": {
+          "AutoMapper": "11.0.1",
+          "ToDoBackend.DAL": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/ToDoBackend.BLL.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ToDoBackend.BLL.dll": {}
+        }
+      },
+      "ToDoBackend.DAL/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v5.0",
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore.SqlServer": "5.0.4"
+        },
+        "compile": {
+          "bin/placeholder/ToDoBackend.DAL.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ToDoBackend.DAL.dll": {}
+        }
       }
     }
   },
   "libraries": {
+    "AutoMapper/11.0.1": {
+      "sha512": "WIadGC1pIwbnyTubvI577p3F++Bsj9q2Q3OaAc1I0QS+JhupN1xkdrPBhI9bPIeg63zM81tZplUNYkqU1HE5jQ==",
+      "type": "package",
+      "path": "automapper/11.0.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "automapper.11.0.1.nupkg.sha512",
+        "automapper.nuspec",
+        "icon.png",
+        "lib/netstandard2.1/AutoMapper.dll",
+        "lib/netstandard2.1/AutoMapper.xml"
+      ]
+    },
     "Humanizer.Core/2.8.26": {
       "sha512": "OiKusGL20vby4uDEswj2IgkdchC1yQ6rwbIkZDVBPIR6al2b7n3pC91elBul9q33KaBgRKhbZH3+2Ur4fnWx2A==",
       "type": "package",
@@ -5697,6 +5751,16 @@
       "type": "project",
       "path": "../ToDoBackend.Auth/ToDoBackend.Auth.csproj",
       "msbuildProject": "../ToDoBackend.Auth/ToDoBackend.Auth.csproj"
+    },
+    "ToDoBackend.BLL/1.0.0": {
+      "type": "project",
+      "path": "../ToDoBackend.BLL/ToDoBackend.BLL.csproj",
+      "msbuildProject": "../ToDoBackend.BLL/ToDoBackend.BLL.csproj"
+    },
+    "ToDoBackend.DAL/1.0.0": {
+      "type": "project",
+      "path": "../ToDoBackend.DAL/ToDoBackend.DAL.csproj",
+      "msbuildProject": "../ToDoBackend.DAL/ToDoBackend.DAL.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -5707,7 +5771,8 @@
       "Microsoft.EntityFrameworkCore.Design >= 5.0.4",
       "Microsoft.EntityFrameworkCore.SqlServer >= 5.0.4",
       "Microsoft.EntityFrameworkCore.Tools >= 5.0.4",
-      "ToDoBackend.Auth >= 1.0.0"
+      "ToDoBackend.Auth >= 1.0.0",
+      "ToDoBackend.BLL >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -5737,6 +5802,9 @@
           "projectReferences": {
             "C:\\ToDo\\ToDoBackend\\ToDoBackend.Auth\\ToDoBackend.Auth.csproj": {
               "projectPath": "C:\\ToDo\\ToDoBackend\\ToDoBackend.Auth\\ToDoBackend.Auth.csproj"
+            },
+            "C:\\ToDo\\ToDoBackend\\ToDoBackend.BLL\\ToDoBackend.BLL.csproj": {
+              "projectPath": "C:\\ToDo\\ToDoBackend\\ToDoBackend.BLL\\ToDoBackend.BLL.csproj"
             }
           }
         }

@@ -1,20 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using ToDoBackend.Auth.Identity;
 using ToDoBackend.Auth.JWT;
+using ToDoBackend.Server.Filters;
 
 namespace ToDoBackend.Server
 {
@@ -29,7 +24,8 @@ namespace ToDoBackend.Server
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers(options => 
+                options.Filters.Add(new ExceptionFilter()));
             services.AddCors();
             services.AddDbContext<AuthContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("Authentication")));
