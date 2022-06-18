@@ -39,9 +39,8 @@ namespace ToDoBackend.Server
             });
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
-            services.AddControllers();
-            /*options => 
-                options.Filters.Add(new ExceptionFilter())*/
+            services.AddControllers(options => 
+                options.Filters.Add(new ExceptionFilter()));
             services.AddCors();
             services.AddDbContext<AuthContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("Authentication")));
