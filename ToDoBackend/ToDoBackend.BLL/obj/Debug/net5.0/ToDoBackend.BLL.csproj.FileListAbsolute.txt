@@ -10,3 +10,6 @@ C:\ToDo\ToDoBackend\ToDoBackend.BLL\obj\Debug\net5.0\ToDoBackend.BLL.csproj.Core
 C:\ToDo\ToDoBackend\ToDoBackend.BLL\obj\Debug\net5.0\ToDoBackend.BLL.dll
 C:\ToDo\ToDoBackend\ToDoBackend.BLL\obj\Debug\net5.0\ref\ToDoBackend.BLL.dll
 C:\ToDo\ToDoBackend\ToDoBackend.BLL\obj\Debug\net5.0\ToDoBackend.BLL.pdb
+C:\ToDo\ToDoBackend\ToDoBackend.BLL\bin\Debug\net5.0\ToDoBackend.DAL.dll
+C:\ToDo\ToDoBackend\ToDoBackend.BLL\bin\Debug\net5.0\ToDoBackend.DAL.pdb
+C:\ToDo\ToDoBackend\ToDoBackend.BLL\obj\Debug\net5.0\ToDoBackend.BLL.csproj.CopyComplete

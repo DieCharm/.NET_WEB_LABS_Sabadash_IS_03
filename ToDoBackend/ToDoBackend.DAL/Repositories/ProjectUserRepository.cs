@@ -49,12 +49,18 @@ namespace ToDoBackend.DAL.Repositories
             _context.ProjectUsers.Update(entity);
         }
         
-        public async Task<bool> DeleteByConditionAsync(Func<ProjectUser, bool> condition)
+        public async Task<bool> DeleteByConditionAsync(Func<ProjectUser,bool> condition)
         {
-            int firstLength = _context.ProjectUsers.Count();
-            (await _context.ProjectUsers.ToListAsync())
-                .RemoveAll(item => condition(item));
-            return _context.ProjectUsers.Count() != firstLength;
+            foreach (var item in _context.ProjectUsers)
+            {
+                if (condition(item))
+                {
+                    _context.ProjectUsers.Remove(item);
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

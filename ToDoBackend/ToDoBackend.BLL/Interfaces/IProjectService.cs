@@ -13,7 +13,7 @@ namespace ToDoBackend.BLL.Interfaces
         Task<IEnumerable<string>> GetAdminIdsByProjectAsync(int projectId);
         Task<bool> IsUserAdminAsync(int projectId, string userId);
         Task SetUserAsAdminAsync(int projectId, string userId);
-
+        Task AddUserToProjectAsync(int projectId, string userId);
         Task RemoveUserFromProjectAsync(int projectId, string userId);
     }
 }

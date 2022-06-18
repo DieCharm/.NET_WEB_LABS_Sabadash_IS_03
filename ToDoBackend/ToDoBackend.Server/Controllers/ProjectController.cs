@@ -46,11 +46,10 @@ namespace ToDoBackend.Server.Controllers
         [Route("rename")]
         public async Task<ActionResult> RenameProjectAsync([FromBody] ProjectModel modelToRename)
         {
-            if (await _projectService.GetByIdAsync(modelToRename.Id) != null &&
-                (await _projectService.GetByIdAsync(modelToRename.Id)).Name != modelToRename.Name &&
-                !(String.IsNullOrEmpty(modelToRename.Name) || String.IsNullOrWhiteSpace(modelToRename.Name)))
+            if (!(String.IsNullOrEmpty(modelToRename.Name) || String.IsNullOrWhiteSpace(modelToRename.Name)))
             {
                 await _projectService.UpdateAsync(modelToRename);
+                return Ok();
             }
 
             return BadRequest();
@@ -66,36 +65,54 @@ namespace ToDoBackend.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProjectModel>>> GetProjectsByUserAsync([FromBody] string userId)
+        [Route("byuser")]
+        public async Task<ActionResult<IEnumerable<ProjectModel>>> GetProjectsByUserAsync([FromBody] UserIdModel userId)
         {
-            return Ok(await _projectService.GetProjectsByUserAsync(userId));
+            return Ok(await _projectService.GetProjectsByUserAsync(userId.UserId));
         }
-        
-        //?? GetUserIdsByProjectAsync ??
-        //?? GetAdminIdsByProjectAsync ??
 
         [HttpGet]
         [Route("isadmin/{projectId}")]
-        public async Task<ActionResult<bool>> IsUserAdminAsync(int projectId, [FromBody] string userId)
+        public async Task<ActionResult<bool>> IsUserAdminAsync(int projectId, [FromBody] UserIdModel userId)
         {
-            return Ok(await _projectService.IsUserAdminAsync(projectId, userId));
+            return Ok(await _projectService.IsUserAdminAsync(projectId, userId.UserId));
         }
 
         //admin
         [HttpPost]
-        [Route("setadmin{projectId}")]
-        public async Task<ActionResult> SetUserAsAdminAsync(int projectId, [FromBody] string userId)
+        [Route("setadmin/{projectId}")]
+        public async Task<ActionResult> SetUserAsAdminAsync(int projectId, [FromBody] UserIdModel userId)
         {
-            await _projectService.SetUserAsAdminAsync(projectId, userId);
+            await _projectService.SetUserAsAdminAsync(projectId, userId.UserId);
             return Ok();
         }
 
         //admin
+        [HttpPost]
+        [Route("adduser/{projectId}")]
+        public async Task<ActionResult> AddUserToProjectAsync(int projectId, [FromBody] UserIdModel userId)
+        {
+            try
+            {
+                await _projectService.RemoveUserFromProjectAsync(projectId, userId.UserId);
+            }
+            catch
+            { }
+            finally
+            {
+                await _projectService.AddUserToProjectAsync(projectId, userId.UserId);
+            }
+            
+            
+            return Ok();
+        }
+        
+        //admin
         [HttpDelete]
         [Route("removeuser/{projectId}")]
-        public async Task<ActionResult> RemoveUserFromProjectAsync(int projectId, [FromBody] string userId)
+        public async Task<ActionResult> RemoveUserFromProjectAsync(int projectId, [FromBody] UserIdModel userId)
         {
-            await _projectService.RemoveUserFromProjectAsync(projectId, userId);
+            await _projectService.RemoveUserFromProjectAsync(projectId, userId.UserId);
             return Ok();
         }
     }

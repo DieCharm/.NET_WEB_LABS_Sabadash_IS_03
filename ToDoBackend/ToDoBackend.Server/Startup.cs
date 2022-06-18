@@ -1,4 +1,5 @@
 using System.Text;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,6 +10,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using ToDoBackend.Auth.Identity;
 using ToDoBackend.Auth.JWT;
+using ToDoBackend.BLL;
+using ToDoBackend.BLL.Interfaces;
+using ToDoBackend.BLL.Services;
+using ToDoBackend.DAL.Database;
+using ToDoBackend.DAL.Interfaces;
 using ToDoBackend.Server.Filters;
 
 namespace ToDoBackend.Server
@@ -24,11 +30,23 @@ namespace ToDoBackend.Server
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers(options => 
-                options.Filters.Add(new ExceptionFilter()));
+            services.AddScoped<ICaseService, CaseService>();
+            services.AddScoped<IProjectService, ProjectService>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new AutomapperProfile());
+            });
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
+            services.AddControllers();
+            /*options => 
+                options.Filters.Add(new ExceptionFilter())*/
             services.AddCors();
             services.AddDbContext<AuthContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("Authentication")));
+            services.AddDbContext<ToDoContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("ToDo")));
             services.AddDefaultIdentity<IdentityUser>(options =>
                 {
                     options.Password.RequiredLength = 5;

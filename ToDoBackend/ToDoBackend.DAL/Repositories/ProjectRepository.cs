@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ToDoBackend.DAL.Database;
@@ -39,7 +40,7 @@ namespace ToDoBackend.DAL.Repositories
 
         public async Task DeleteByIdAsync(int id)
         {
-            _context.Projects.Remove(await _context.Projects.FindAsync(id));
+            Delete(await _context.Projects.FindAsync(id));
         }
 
         public void Update(Project entity)

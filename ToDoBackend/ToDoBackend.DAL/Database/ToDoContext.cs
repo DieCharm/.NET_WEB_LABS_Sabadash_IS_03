@@ -9,6 +9,14 @@ namespace ToDoBackend.DAL.Database
             : base(options)
         { }
 
+        /*public ToDoContext()
+        {
+        }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer(@"Server=JACKFLASHPC;Database=ToDoDb;Trusted_Connection=True;");
+        }*/
+
         public DbSet<Project> Projects { get; set; }
         public DbSet<Case> Cases { get; set; }
         public DbSet<ProjectUser> ProjectUsers { get; set; }

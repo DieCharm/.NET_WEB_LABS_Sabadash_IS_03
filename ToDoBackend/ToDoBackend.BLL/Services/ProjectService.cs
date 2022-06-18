@@ -62,16 +62,25 @@ namespace ToDoBackend.BLL.Services
                     .DeleteByConditionAsync(c => c.ProjectId == id);
                 await _unitOfWork.SaveAsync();
             }
-
-            throw new ArgumentException();
+            else
+            {
+                throw new ArgumentException();
+            }
         }
 
         public async Task<IEnumerable<ProjectModel>> GetProjectsByUserAsync(string userId)
         {
-            return _mapper.Map<IEnumerable<Project>, IEnumerable<ProjectModel>>
-            ((await _unitOfWork._projectUserRepository.GetAllAsync())
+            IEnumerable<int> indexes = (await _unitOfWork._projectUserRepository.GetAllAsync())
                 .Where(projectUser => projectUser.UserId == userId)
-                .Select(projectUser => projectUser.Project));
+                .Select(projectUser => projectUser.ProjectId);
+            List<ProjectModel> result = new List<ProjectModel>();
+            foreach (var index in indexes)
+            {
+                result.Add(_mapper.Map<Project, ProjectModel>
+                    (await _unitOfWork._projectRepository.GetByIdAsync(index)));
+            }
+
+            return result;
         }
 
         public async Task<IEnumerable<string>> GetUserIdsByProjectAsync(int projectId)
@@ -108,7 +117,21 @@ namespace ToDoBackend.BLL.Services
                 userProject.IsAdmin = true;
                 await _unitOfWork.SaveAsync();
             }
-            throw new ArgumentException();
+            else
+            {
+                throw new ArgumentException();
+            }
+        }
+
+        public async Task AddUserToProjectAsync(int projectId, string userId)
+        {
+            await _unitOfWork._projectUserRepository.AddAsync(
+                new ProjectUser()
+                {
+                    ProjectId = projectId,
+                    UserId = userId
+                });
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task RemoveUserFromProjectAsync(int projectId, string userId)
@@ -128,8 +151,10 @@ namespace ToDoBackend.BLL.Services
             
                 await _unitOfWork.SaveAsync();
             }
-
-            throw new ArgumentException();
+            else
+            {
+                throw new ArgumentException();
+            }
         }
 
         public void Dispose()
