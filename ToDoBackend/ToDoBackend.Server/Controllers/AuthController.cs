@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Google.Apis.Gmail.v1.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
-using ToDoBackend.Auth.Identity;
 using ToDoBackend.Auth.JWT;
 using ToDoBackend.Auth.Models;
+using ToDoBackend.BLL.Interfaces;
 
 namespace ToDoBackend.Server.Controllers
 {
@@ -16,37 +15,77 @@ namespace ToDoBackend.Server.Controllers
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly IMailService _mailService;
 
         public AuthController
         (UserManager<IdentityUser> userManager, 
-            SignInManager<IdentityUser> signInManager)
+            SignInManager<IdentityUser> signInManager,
+            IMailService mailService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _mailService = mailService;
         }
         
         [HttpPost]
         [Route("register")]
-        public async Task<ActionResult> Register([FromBody] Login request)
+        public async Task<ActionResult> Register([FromBody] Register request)
         {
             if (ModelState.IsValid)
             {
-                IdentityUser newUser = new IdentityUser()
+                IdentityUser user = new IdentityUser()
                 {
+                    Email = request.EMail,
                     UserName = request.UserName
                 };
-                var result = await _userManager.CreateAsync(newUser, request.Password);
+                
+                var result = await _userManager.CreateAsync(user, request.Password);
 
                 if (result.Succeeded)
                 {
-                    await _signInManager.SignInAsync(newUser, false);
-                    //await _userManager.AddToRoleAsync(newUser,"member");
-                    string token = Token.GetToken(newUser);
-                    return new JsonResult(token);
+                    try
+                    {
+                        var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    
+                        var confirmationLink = Url.Action(
+                            "ConfirmEMail", 
+                            "Auth",
+                            new { user.Email, token },
+                            Request.Scheme);
+
+                        var message = $"Confirmation email link\n{confirmationLink}";
+
+                        if (_mailService.SendAsync(message))
+                        {
+                            return Ok();
+                        }
+                    }
+                    finally
+                    {
+                        await _userManager.DeleteAsync(user);
+                    }
                 }
             }
+            
+            return BadRequest();
+        }
 
-            return new UnauthorizedResult();
+        [HttpGet]
+        [Route("confirm-email")]
+        public async Task<ActionResult> ConfirmEMail(string email, string token)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null) return BadRequest();
+            
+            var result = await _userManager.ConfirmEmailAsync(user, token);
+            if (result.Succeeded)
+            {
+                await _signInManager.SignInAsync(user, false);
+                string jwt = Token.GetToken(user);
+                return new JsonResult(jwt);
+            }
+
+            return BadRequest();
         }
 
         [HttpPost]
@@ -55,18 +94,30 @@ namespace ToDoBackend.Server.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync
-                    (request.UserName, request.Password, false, false);
+                var user = await _userManager.FindByEmailAsync(request.EMail);
 
-                if (result.Succeeded)
+                if (user != null)
                 {
-                    var userToLogIn = await _userManager.FindByNameAsync(request.UserName);
-                    string token = Token.GetToken(userToLogIn);
-                    return new JsonResult(token);
+                    var result = _signInManager
+                        .PasswordSignInAsync(user, request.Password, false, false);
+
+                    if (result.IsCompletedSuccessfully)
+                    {
+                        string token = Token.GetToken(user);
+                        return new JsonResult(token);
+                    }
                 }
             }
+            ModelState.TryAddModelError("", "Invalid credentials");
 
             return new UnauthorizedResult();
+        }
+
+        [HttpDelete]
+        [Route("logout")]
+        public async Task LogOut()
+        {
+            await _signInManager.SignOutAsync();
         }
     }
 }

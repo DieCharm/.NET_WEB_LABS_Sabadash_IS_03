@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using ToDoBackend.Auth.Identity;
 using ToDoBackend.Auth.JWT;
 using ToDoBackend.BLL;
@@ -32,20 +33,26 @@ namespace ToDoBackend.Server
         {
             services.AddScoped<ICaseService, CaseService>();
             services.AddScoped<IProjectService, ProjectService>();
+            services.AddScoped<IMailService, MailService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            
             var mapperConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new AutomapperProfile());
             });
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
+            
             services.AddControllers(options => 
                 options.Filters.Add(new ExceptionFilter()));
+            
             services.AddCors();
+            
             services.AddDbContext<AuthContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("Authentication")));
             services.AddDbContext<ToDoContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("ToDo")));
+            
             services.AddDefaultIdentity<IdentityUser>(options =>
                 {
                     options.Password.RequiredLength = 5;
@@ -53,8 +60,13 @@ namespace ToDoBackend.Server
                     options.Password.RequireUppercase = false;
                     options.Password.RequireDigit = false;
                     options.Password.RequireNonAlphanumeric = false;
+                    
+                    options.User.RequireUniqueEmail = true;
+                    
+                    options.SignIn.RequireConfirmedEmail = true;
                 })
                 .AddEntityFrameworkStores<AuthContext>();
+            
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -71,6 +83,11 @@ namespace ToDoBackend.Server
                         ValidateIssuerSigningKey = true
                     };
                 });
+            
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo() { Title = "Market", Version = "v1" });                
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -80,13 +97,18 @@ namespace ToDoBackend.Server
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader());
+            app.UseCors(builder => builder
+                .AllowAnyOrigin()
+                .AllowAnyHeader());
  
             app.UseRouting();
  
             app.UseAuthentication();
             app.UseAuthorization();
             
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json","Market API"));
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
@@ -94,3 +116,6 @@ namespace ToDoBackend.Server
         }
     }
 }
+
+
+

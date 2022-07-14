@@ -45,6 +45,10 @@
             "AutoMapper": {
               "target": "Package",
               "version": "[11.0.1, )"
+            },
+            "Google.Apis.Gmail.v1": {
+              "target": "Package",
+              "version": "[1.57.0.2650, )"
             }
           },
           "imports": [

@@ -10,6 +10,7 @@
 
     <ItemGroup>
       <PackageReference Include="AutoMapper" Version="11.0.1" />
+      <PackageReference Include="Google.Apis.Gmail.v1" Version="1.57.0.2650" />
     </ItemGroup>
 
     <ItemGroup>
