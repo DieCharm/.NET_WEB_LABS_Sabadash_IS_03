@@ -2,6 +2,6 @@
 {
     public interface IMailService
     {
-        public bool SendAsync(string message);
+        public bool SendAsync(string to, string name, string text);
     }
 }

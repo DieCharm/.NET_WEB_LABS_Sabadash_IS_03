@@ -49,6 +49,10 @@
             "Google.Apis.Gmail.v1": {
               "target": "Package",
               "version": "[1.57.0.2650, )"
+            },
+            "MimeKit": {
+              "target": "Package",
+              "version": "[3.3.0, )"
             }
           },
           "imports": [

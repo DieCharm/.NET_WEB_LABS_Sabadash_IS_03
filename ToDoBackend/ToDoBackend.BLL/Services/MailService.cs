@@ -1,19 +1,19 @@
 ﻿using System;
 using System.IO;
-using System.Net.Mail;
 using System.Threading;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Gmail.v1;
 using Google.Apis.Gmail.v1.Data;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
+using MimeKit;
 using ToDoBackend.BLL.Interfaces;
 
 namespace ToDoBackend.BLL.Services
 {
     public class MailService : IMailService
     {
-        public bool SendAsync(string message)
+        public bool SendAsync(string to, string name, string text)
         {
             try
             {
@@ -33,7 +33,6 @@ namespace ToDoBackend.BLL.Services
                         "user",
                         CancellationToken.None,
                         new FileDataStore(credPath, true)).Result;
-                    Console.WriteLine("Credential file saved to: " + credPath);
                 }
 
                 // Create Gmail API service.
@@ -43,12 +42,25 @@ namespace ToDoBackend.BLL.Services
                     ApplicationName = "ToDoBackend"
                 });
 
-                //var toSend = new MailMessage("To Do", "somebody", "Confirm your email address", message);
-
-                var toSend = new Message()
+                //create message
+                MimeMessage message = new MimeMessage();
+                message.To.Add(new MailboxAddress(name, to));
+                message.Body = new TextPart("plain")
                 {
-                    Raw = message,
-                    
+                    Text = text
+                };
+
+                MemoryStream memoryStream = new MemoryStream();
+                message.WriteTo(memoryStream);
+                memoryStream.Position = 0;
+                StreamReader streamReader = new StreamReader(memoryStream);
+                string rawString = streamReader.ReadToEnd();
+
+                byte[] raw = System.Text.Encoding.UTF8.GetBytes(rawString);
+                
+                Message toSend = new Message()
+                {
+                    Raw = Convert.ToBase64String(raw)
                 };
 
                 //Send message
@@ -62,15 +74,6 @@ namespace ToDoBackend.BLL.Services
             {
                 return false;
             }
-        }
-        
-        private string Base64UrlEncode(string input)
-        {
-            var inputBytes = System.Text.Encoding.UTF8.GetBytes(input);
-            return Convert.ToBase64String(inputBytes)
-                .Replace('+', '-')
-                .Replace('/', '_')
-                .Replace("=", "");
         }
     }
 }

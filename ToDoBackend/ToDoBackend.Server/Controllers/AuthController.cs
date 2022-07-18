@@ -43,27 +43,22 @@ namespace ToDoBackend.Server.Controllers
 
                 if (result.Succeeded)
                 {
-                    try
-                    {
-                        var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     
-                        var confirmationLink = Url.Action(
-                            "ConfirmEMail", 
-                            "Auth",
-                            new { user.Email, token },
-                            Request.Scheme);
+                    var confirmationLink = Url.Action(
+                        "ConfirmEMail", 
+                        "Auth",
+                        new { user.Email, token },
+                        Request.Scheme);
 
-                        var message = $"Confirmation email link\n{confirmationLink}";
+                    var message = $"Confirmation email link\n{confirmationLink}";
 
-                        if (_mailService.SendAsync(message))
-                        {
-                            return Ok();
-                        }
-                    }
-                    finally
+                    if (_mailService.SendAsync(request.EMail, request.UserName, message))
                     {
-                        await _userManager.DeleteAsync(user);
+                        return Ok();
                     }
+                    
+                    await _userManager.DeleteAsync(user);
                 }
             }
             
