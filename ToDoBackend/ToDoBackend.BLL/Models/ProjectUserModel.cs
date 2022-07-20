@@ -1,6 +1,4 @@
-﻿using ToDoBackend.DAL.Entities;
-
-namespace ToDoBackend.BLL.Models
+﻿namespace ToDoBackend.BLL.Models
 {
     public class ProjectUserModel
     {

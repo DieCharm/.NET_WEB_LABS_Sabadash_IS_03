@@ -111,7 +111,10 @@ namespace ToDoBackend.BLL.Services
         public async Task SetUserAsAdminAsync(int projectId, string userId)
         {
             var userProject = (await _unitOfWork._projectUserRepository.GetAllAsync())
-                .FirstOrDefault(projectUser => projectUser.UserId == userId && projectUser.ProjectId == projectId);
+                .FirstOrDefault(
+                    projectUser => 
+                        projectUser.UserId == userId && 
+                                   projectUser.ProjectId == projectId);
             if (userProject != null)
             {
                 userProject.IsAdmin = true;

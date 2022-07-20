@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -65,8 +66,12 @@ namespace ToDoBackend.Server
                     
                     options.SignIn.RequireConfirmedEmail = true;
                 })
+                .AddRoles<IdentityRole>()
+                .AddRoleManager<RoleManager<IdentityRole>>()
                 .AddEntityFrameworkStores<AuthContext>();
             
+            services.AddScoped<RoleSeeder>();
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -86,11 +91,14 @@ namespace ToDoBackend.Server
             
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo() { Title = "Market", Version = "v1" });                
+                c.SwaggerDoc("v1", new OpenApiInfo() { Title = "Market", Version = "v1" });            
             });
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(
+            IApplicationBuilder app, 
+            IWebHostEnvironment env,
+            RoleSeeder seeder)
         {
             app.UseDeveloperExceptionPage();
 
@@ -106,6 +114,8 @@ namespace ToDoBackend.Server
             app.UseAuthentication();
             app.UseAuthorization();
             
+            seeder.SeedRolesAsync();
+
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json","Market API"));
 
