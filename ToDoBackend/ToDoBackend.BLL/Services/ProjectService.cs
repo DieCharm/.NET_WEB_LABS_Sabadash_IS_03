@@ -12,8 +12,8 @@ namespace ToDoBackend.BLL.Services
 {
     public class ProjectService : IProjectService
     {
-        private IMapper _mapper;
-        private IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork;
 
         public ProjectService(IMapper mapper, IUnitOfWork unitOfWork)
         {
@@ -115,6 +115,7 @@ namespace ToDoBackend.BLL.Services
                     projectUser => 
                         projectUser.UserId == userId && 
                                    projectUser.ProjectId == projectId);
+            //var user = 
             if (userProject != null)
             {
                 userProject.IsAdmin = true;

@@ -14,7 +14,7 @@ namespace ToDoBackend.Server.Controllers
     [Route("[controller]")]
     public class ProjectController : ControllerBase
     {
-        private IProjectService _projectService;
+        private readonly IProjectService _projectService;
         private readonly UserManager<IdentityUser> _userManager;
 
         public ProjectController(
@@ -25,7 +25,7 @@ namespace ToDoBackend.Server.Controllers
             _userManager = userManager;
         }
         
-        //admin
+        [Authorize(Roles = "admin")]
         [HttpGet]
         [Route("{projectId}")]
         public async Task<ActionResult<ProjectModel>> GetByIdAsync(int projectId)
@@ -33,7 +33,7 @@ namespace ToDoBackend.Server.Controllers
             return await _projectService.GetByIdAsync(projectId);
         }
 
-        //admin
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<ActionResult> AddAsync([FromBody] ProjectModel model)
         {
@@ -41,7 +41,7 @@ namespace ToDoBackend.Server.Controllers
             return Ok();
         }
 
-        //admin
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [Route("rename")]
         public async Task<ActionResult> RenameProjectAsync([FromBody] ProjectModel modelToRename)
@@ -55,7 +55,7 @@ namespace ToDoBackend.Server.Controllers
             return BadRequest();
         }
         
-        //admin
+        [Authorize(Roles = "admin")]
         [HttpDelete]
         [Route("{id}")]
         public async Task<ActionResult> DeleteAsync(int id)
@@ -78,36 +78,31 @@ namespace ToDoBackend.Server.Controllers
             return Ok(await _projectService.IsUserAdminAsync(projectId, userId.UserId));
         }
 
-        //admin
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [Route("setadmin/{projectId}")]
         public async Task<ActionResult> SetUserAsAdminAsync(int projectId, [FromBody] UserIdModel userId)
         {
-            await _projectService.SetUserAsAdminAsync(projectId, userId.UserId);
-            return Ok();
+            IdentityUser user = await _userManager.FindByIdAsync(userId.UserId);
+            if (user != null && await _userManager.IsInRoleAsync(user, "admin"))
+            {
+                await _projectService.SetUserAsAdminAsync(projectId, userId.UserId);
+                return Ok();
+            }
+
+            return BadRequest();
         }
 
-        //admin
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [Route("adduser/{projectId}")]
         public async Task<ActionResult> AddUserToProjectAsync(int projectId, [FromBody] UserIdModel userId)
         {
-            try
-            {
-                await _projectService.RemoveUserFromProjectAsync(projectId, userId.UserId);
-            }
-            catch
-            { }
-            finally
-            {
-                await _projectService.AddUserToProjectAsync(projectId, userId.UserId);
-            }
-            
-            
+            await _projectService.AddUserToProjectAsync(projectId, userId.UserId);
             return Ok();
         }
         
-        //admin
+        [Authorize(Roles = "admin")]
         [HttpDelete]
         [Route("removeuser/{projectId}")]
         public async Task<ActionResult> RemoveUserFromProjectAsync(int projectId, [FromBody] UserIdModel userId)

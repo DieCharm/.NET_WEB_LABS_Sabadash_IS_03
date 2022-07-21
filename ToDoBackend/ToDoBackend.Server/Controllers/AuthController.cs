@@ -1,9 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
-using Google.Apis.Gmail.v1.Data;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using ToDoBackend.Auth.JWT;
+using ToDoBackend.Auth.Interfaces;
 using ToDoBackend.Auth.Models;
 using ToDoBackend.BLL.Interfaces;
 
@@ -16,17 +15,25 @@ namespace ToDoBackend.Server.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IMailService _mailService;
+        private readonly ITokenService _tokenService;
 
-        public AuthController
-        (UserManager<IdentityUser> userManager, 
+        public AuthController(
+            UserManager<IdentityUser> userManager, 
             SignInManager<IdentityUser> signInManager,
-            IMailService mailService)
+            IMailService mailService,
+            ITokenService tokenService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _mailService = mailService;
+            _tokenService = tokenService;
         }
         
+        /// <summary>
+        /// Is called to create a new user and send confirmation email
+        /// </summary>
+        /// <param name="request">Register model with user info</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("register")]
         public async Task<ActionResult> Register([FromBody] Register request)
@@ -65,6 +72,12 @@ namespace ToDoBackend.Server.Controllers
             return BadRequest();
         }
 
+        /// <summary>
+        /// Confirms an email
+        /// </summary>
+        /// <param name="email">Email</param>
+        /// <param name="token">Confirmation token generated in register method</param>
+        /// <returns>JWT token</returns>
         [HttpGet]
         [Route("confirm-email")]
         public async Task<ActionResult> ConfirmEMail(string email, string token)
@@ -76,13 +89,18 @@ namespace ToDoBackend.Server.Controllers
             if (result.Succeeded)
             {
                 await _signInManager.SignInAsync(user, false);
-                string jwt = Token.GetToken(user);
+                string jwt = _tokenService.GetToken(user);
                 return new JsonResult(jwt);
             }
 
             return BadRequest();
         }
 
+        /// <summary>
+        /// Is called to sign in registered user
+        /// </summary>
+        /// <param name="request">Email and password</param>
+        /// <returns>JWT token</returns>
         [HttpPost]
         [Route("login")]
         public async Task<ActionResult> Login([FromBody] Login request)
@@ -98,21 +116,25 @@ namespace ToDoBackend.Server.Controllers
 
                     if (result.IsCompletedSuccessfully)
                     {
-                        string token = Token.GetToken(user);
+                        string token = _tokenService.GetToken(user);
                         return new JsonResult(token);
                     }
                 }
             }
-            ModelState.TryAddModelError("", "Invalid credentials");
 
             return new UnauthorizedResult();
         }
 
+        /// <summary>
+        /// Is called to log out and deactivate JWT token
+        /// </summary>
+        [Authorize]
         [HttpDelete]
         [Route("logout")]
         public async Task LogOut()
         {
             await _signInManager.SignOutAsync();
+            //cancel token mb
         }
     }
 }

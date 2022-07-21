@@ -29,24 +29,22 @@ namespace ToDoBackend.Server
                     Console.WriteLine(e);
                 }
             }
+        }
 
-            if (!_roleManager.RoleExistsAsync("user").Result)
+        public void SeedAdminAsync()
+        {
+            IdentityUser admin = _userManager.FindByEmailAsync("dymedroll228@gmail.com").Result;
+
+            if (admin != null && !_userManager.IsInRoleAsync(admin, "admin").Result)
             {
                 try
                 {
-                    IdentityResult result = _roleManager.CreateAsync(new IdentityRole("user")).Result;
+                    IdentityResult result = _userManager.AddToRoleAsync(admin, "admin").Result;
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e);
                 }
-            }
-
-            IdentityUser admin = _userManager.FindByEmailAsync("dymedroll228@gmail.com").Result;
-
-            if (admin != null && !_userManager.IsInRoleAsync(admin, "admin").Result)
-            {
-                IdentityResult result = _userManager.AddToRoleAsync(admin, "admin").Result;
             }
         }
     }

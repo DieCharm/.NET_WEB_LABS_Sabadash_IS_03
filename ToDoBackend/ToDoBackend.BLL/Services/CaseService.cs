@@ -12,8 +12,8 @@ namespace ToDoBackend.BLL.Services
 {
     public class CaseService : ICaseService
     {
-        private IMapper _mapper;
-        private IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork;
 
         public CaseService(IMapper mapper, IUnitOfWork unitOfWork)
         {

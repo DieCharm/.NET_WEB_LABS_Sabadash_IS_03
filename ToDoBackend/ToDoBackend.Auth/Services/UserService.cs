@@ -1,9 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using ToDoBackend.Auth.Interfaces;
 
 namespace ToDoBackend.Auth.Services
 {
-    public class UserService
+    public class UserService : IUserService
     {
         private readonly UserManager<IdentityUser> _userManager;
 
@@ -15,6 +17,18 @@ namespace ToDoBackend.Auth.Services
         public async Task<IdentityUser> GetUserByIdAsync(string id)
         {
             return await _userManager.FindByIdAsync(id);
+        }
+
+        public async Task<bool> MakeUserAdminAsync(IdentityUser user)
+        {
+            try
+            {
+                return (await _userManager.AddToRoleAsync(user, "admin")).Succeeded;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

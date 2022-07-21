@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ToDoBackend.BLL.Interfaces;
 using ToDoBackend.BLL.Models;
@@ -14,15 +13,12 @@ namespace ToDoBackend.Server.Controllers
     [Route("[controller]")]
     public class CaseController: ControllerBase
     {
-        private ICaseService _caseService;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly ICaseService _caseService;
 
         public CaseController(
-            ICaseService caseService,
-            UserManager<IdentityUser> userManager)
+            ICaseService caseService)
         {
             _caseService = caseService;
-            _userManager = userManager;
         }
 
         [HttpGet]
@@ -32,7 +28,7 @@ namespace ToDoBackend.Server.Controllers
             return Ok(await _caseService.GetByIdAsync(caseId));
         }
 
-        //admin
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<ActionResult> AddAsync([FromBody] CaseModel model)
         {
@@ -40,7 +36,7 @@ namespace ToDoBackend.Server.Controllers
             return Ok();
         }
 
-        //admin
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [Route("name/{id}/{name}")]
         public async Task<ActionResult> ChangeNameAsync(int id, string name)
@@ -49,7 +45,7 @@ namespace ToDoBackend.Server.Controllers
             return Ok();
         }
         
-        //admin
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [Route("description/{id}/{description}")]
         public async Task<ActionResult> ChangeDescriptionAsync(int id, string description)
@@ -58,7 +54,7 @@ namespace ToDoBackend.Server.Controllers
             return Ok();
         }
         
-        //admin
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [Route("deadline/{id}")]
         public async Task<ActionResult> ChangeDeadlineAsync(int id, [FromBody] DateTime deadline)
@@ -67,7 +63,7 @@ namespace ToDoBackend.Server.Controllers
             return Ok();
         }
         
-        //admin
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [Route("priority/{id}/{priority}")]
         public async Task<ActionResult> ChangePriorityAsync(int id, int priority)
@@ -84,7 +80,7 @@ namespace ToDoBackend.Server.Controllers
             return Ok();
         }
         
-        //admin
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [Route("setuser/{id}/{userId}")]
         public async Task<ActionResult> SetUserAsync(int id, string userId)
@@ -93,7 +89,7 @@ namespace ToDoBackend.Server.Controllers
             return Ok();
         }
         
-        //admin
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [Route("removeuser/{id}")]
         public async Task<ActionResult> RemoveUserAsync(int id)
@@ -102,7 +98,7 @@ namespace ToDoBackend.Server.Controllers
             return Ok();
         }
 
-        //admin
+        [Authorize(Roles = "admin")]
         [HttpDelete]
         [Route("{id}")]
         public async Task<ActionResult> DeleteAsync(int id)

@@ -1,4 +1,3 @@
-using System;
 using System.Text;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -11,7 +10,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ToDoBackend.Auth.Identity;
-using ToDoBackend.Auth.JWT;
+using ToDoBackend.Auth.Interfaces;
+using ToDoBackend.Auth.Services;
 using ToDoBackend.BLL;
 using ToDoBackend.BLL.Interfaces;
 using ToDoBackend.BLL.Services;
@@ -23,18 +23,21 @@ namespace ToDoBackend.Server
 {
     public class Startup
     {
-        public IConfiguration Configuration;
+        private readonly IConfiguration _configuration;
 
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            _configuration = configuration;
         }
 
-        public void ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(
+            IServiceCollection services)
         {
             services.AddScoped<ICaseService, CaseService>();
             services.AddScoped<IProjectService, ProjectService>();
             services.AddScoped<IMailService, MailService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             
             var mapperConfig = new MapperConfiguration(mc =>
@@ -50,9 +53,9 @@ namespace ToDoBackend.Server
             services.AddCors();
             
             services.AddDbContext<AuthContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("Authentication")));
+                options.UseSqlServer(_configuration.GetConnectionString("Authentication")));
             services.AddDbContext<ToDoContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("ToDo")));
+                options.UseSqlServer(_configuration.GetConnectionString("ToDo")));
             
             services.AddDefaultIdentity<IdentityUser>(options =>
                 {
@@ -79,12 +82,12 @@ namespace ToDoBackend.Server
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
-                        ValidIssuer = AuthOptions.ISSUER,
+                        ValidIssuer = _configuration["Jwt:Issuer"],
                         ValidateAudience = true,
-                        ValidAudience = AuthOptions.AUDIENCE,
+                        ValidAudience = _configuration["Jwt:Audience"],
                         ValidateLifetime = true,
                         IssuerSigningKey = new SymmetricSecurityKey
-                            (Encoding.ASCII.GetBytes(AuthOptions.KEY)),
+                            (Encoding.ASCII.GetBytes(_configuration["Jwt:Key"])),
                         ValidateIssuerSigningKey = true
                     };
                 });
@@ -115,6 +118,7 @@ namespace ToDoBackend.Server
             app.UseAuthorization();
             
             seeder.SeedRolesAsync();
+            seeder.SeedAdminAsync();
 
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json","Market API"));
