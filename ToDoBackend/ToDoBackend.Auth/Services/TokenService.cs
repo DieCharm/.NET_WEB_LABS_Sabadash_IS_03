@@ -37,7 +37,7 @@ namespace ToDoBackend.Auth.Services
                 expires: DateTime.Now.AddSeconds(Convert.ToDouble(_configuration["Jwt:Lifetime"])),
                 signingCredentials: new SigningCredentials(
                     new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_configuration["Jwt:Key"])), 
-                    SecurityAlgorithms.HmacSha256));
+                    SecurityAlgorithms.HmacSha512));
 
             return new JwtSecurityTokenHandler()
                 .WriteToken(token);

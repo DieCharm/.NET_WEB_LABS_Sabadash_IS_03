@@ -1,0 +1,6 @@
+**/.idea
+**/bin
+**/obj
+**/token.json
+appsettings.json
+client_secret.json
